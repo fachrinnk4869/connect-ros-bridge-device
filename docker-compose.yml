@@ -1,0 +1,26 @@
+services:
+  ros_master:
+    build: .
+    container_name: ros_master
+    command: roscore
+    network_mode: host 
+    networks:
+      - ros_network
+    environment:
+      - ROS_MASTER_URI=http://ros_master:11311
+      - ROS_IP=ros_master
+
+  ros_node:
+    build: .
+    container_name: ros_node
+    depends_on:
+      - ros_master
+    networks:
+      - ros_network
+    environment:
+      - ROS_MASTER_URI=http://ros_master:11311
+      - ROS_IP=ros_node
+
+networks:
+  ros_network:
+    driver: bridge
